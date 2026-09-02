@@ -1,0 +1,223 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ─────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  TECHNICIAN
+}
+
+enum ComputerStatus {
+  NORMAL
+  REPAIR
+  DAMAGED
+  RETIRED
+  LOST
+}
+
+enum RepairStatus {
+  WAITING
+  ASSIGNED
+  DIAGNOSING
+  REPAIRING
+  WAITING_PART
+  COMPLETED
+  RETURNED
+  CANCELLED
+}
+
+enum ProblemType {
+  HARDWARE
+  SOFTWARE
+  NETWORK
+  WINDOWS
+  PRINTER
+  VIRUS_MALWARE
+  OTHER
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+// ─── Models ────────────────────────────────────────────
+
+model Department {
+  id          String   @id @default(cuid())
+  code        String   @unique
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users     User[]
+  computers Computer[]
+  repairs   Repair[]
+
+  @@map("departments")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  email        String   @unique
+  password     String
+  name         String
+  role         UserRole @default(TECHNICIAN)
+  departmentId String?
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  department       Department?  @relation(fields: [departmentId], references: [id])
+  assignedRepairs  Repair[]     @relation("TechnicianRepairs")
+  changedStatuses  RepairStatusHistory[]
+
+  @@map("users")
+}
+
+model Computer {
+  id              String          @id @default(cuid())
+  assetCode       String          @unique
+  serialNumber    String?
+  computerName    String?
+  brand           String?
+  model           String?
+  cpu             String?
+  ram             String?
+  storage         String?
+  operatingSystem String?
+  ipAddress       String?
+  macAddress      String?
+  departmentId    String?
+  location        String?
+  assignedUser    String?
+  purchaseDate    DateTime?
+  warrantyExpiry  DateTime?
+  status          ComputerStatus  @default(NORMAL)
+  remark          String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  department Department? @relation(fields: [departmentId], references: [id])
+  repairs    Repair[]
+
+  @@map("computers")
+}
+
+model Repair {
+  id                 String        @id @default(cuid())
+  repairNo           String        @unique
+  computerId         String?
+  requesterName      String
+  departmentId       String?
+  location           String?
+  problemDescription String
+  problemType        ProblemType
+  priority           Priority      @default(MEDIUM)
+  technicianId       String?
+  receivedAt         DateTime?
+  startedAt          DateTime?
+  completedAt        DateTime?
+  returnedAt         DateTime?
+  cause              String?
+  solution           String?
+  cost               Float?
+  status             RepairStatus  @default(WAITING)
+  remark             String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  computer   Computer?            @relation(fields: [computerId], references: [id])
+  department Department?          @relation(fields: [departmentId], references: [id])
+  technician User?                @relation("TechnicianRepairs", fields: [technicianId], references: [id])
+  histories  RepairStatusHistory[]
+  parts      RepairPart[]
+  attachments RepairAttachment[]
+
+  @@map("repairs")
+}
+
+model RepairStatusHistory {
+  id          String   @id @default(cuid())
+  repairId    String
+  status      RepairStatus
+  description String?
+  changedBy   String?
+  createdAt   DateTime @default(now())
+
+  repair   Repair @relation(fields: [repairId], references: [id], onDelete: Cascade)
+  user     User?  @relation(fields: [changedBy], references: [id])
+
+  @@map("repair_status_histories")
+}
+
+model Part {
+  id          String   @id @default(cuid())
+  partCode    String   @unique
+  name        String
+  category    String?
+  brand       String?
+  model       String?
+  stock       Int      @default(0)
+  minimumStock Int     @default(0)
+  unit        String?
+  price       Float    @default(0)
+  supplier    String?
+  remark      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  repairParts RepairPart[]
+
+  @@map("parts")
+}
+
+model RepairPart {
+  id        String   @id @default(cuid())
+  repairId  String
+  partId    String
+  quantity  Int      @default(1)
+  price     Float
+  total     Float
+  createdAt DateTime @default(now())
+
+  repair Repair @relation(fields: [repairId], references: [id], onDelete: Cascade)
+  part   Part   @relation(fields: [partId], references: [id])
+
+  @@map("repair_parts")
+}
+
+model RepairAttachment {
+  id        String   @id @default(cuid())
+  repairId  String
+  fileName  String
+  fileUrl   String
+  fileType  String?
+  createdAt DateTime @default(now())
+
+  repair Repair @relation(fields: [repairId], references: [id], onDelete: Cascade)
+
+  @@map("repair_attachments")
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("password_reset_tokens")
+}
