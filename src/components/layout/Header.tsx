@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { Search, Bell, User, LogOut } from "lucide-react";
+import { Search, Bell, User, LogOut, Plus, Monitor, Wrench } from "lucide-react";
 import Link from "next/link";
 
 export default function Header() {
@@ -11,6 +11,7 @@ export default function Header() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showQuickMenu, setShowQuickMenu] = useState(false);
 
   const handleSearch = useCallback(
     (e: React.FormEvent) => {
@@ -40,6 +41,52 @@ export default function Header() {
 
       {/* Right side */}
       <div className="flex items-center gap-2">
+        {/* Quick Add Popup */}
+        <div className="relative">
+          <button
+            onClick={() => setShowQuickMenu(!showQuickMenu)}
+            className="p-2 bg-[#0866FF] text-white rounded-full hover:bg-[#0748B3] transition-colors shadow-md"
+            title="Quick Add"
+          >
+            <Plus size={20} />
+          </button>
+
+          {showQuickMenu && (
+            <>
+              <div className="fixed inset-0 z-40" onClick={() => setShowQuickMenu(false)} />
+              <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#DADDE1] z-50 py-2">
+                <p className="px-4 py-2 text-[10px] font-semibold text-[#65676B] uppercase tracking-wider">Quick Add</p>
+                <Link
+                  href="/computers/new"
+                  onClick={() => setShowQuickMenu(false)}
+                  className="flex items-center gap-3 px-4 py-3 text-sm text-[#1C1E21] hover:bg-[#F0F2F5] transition-colors"
+                >
+                  <div className="w-8 h-8 bg-[#42B72A] rounded-full flex items-center justify-center">
+                    <Monitor size={16} className="text-white" />
+                  </div>
+                  <div>
+                    <p className="font-medium">Add Computer</p>
+                    <p className="text-xs text-[#65676B]">เพิ่มเครื่องใหม่</p>
+                  </div>
+                </Link>
+                <Link
+                  href="/repairs/new"
+                  onClick={() => setShowQuickMenu(false)}
+                  className="flex items-center gap-3 px-4 py-3 text-sm text-[#1C1E21] hover:bg-[#F0F2F5] transition-colors"
+                >
+                  <div className="w-8 h-8 bg-[#0866FF] rounded-full flex items-center justify-center">
+                    <Wrench size={16} className="text-white" />
+                  </div>
+                  <div>
+                    <p className="font-medium">New Repair</p>
+                    <p className="text-xs text-[#65676B]">สร้างงานซ่อมใหม่</p>
+                  </div>
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+
         <button className="relative p-2 text-[#65676B] hover:bg-[#F0F2F5] rounded-full transition-colors">
           <Bell size={20} />
           <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#FA3E3E] rounded-full border-2 border-white" />

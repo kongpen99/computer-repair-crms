@@ -219,31 +219,6 @@ export default function Sidebar() {
             {navItems.map(renderNavItem)}
           </nav>
 
-          {/* Quick Action Buttons */}
-          <div className="px-3 py-3 border-t border-[#E4E6EB]">
-            <p className="text-[10px] font-semibold text-[#65676B] uppercase tracking-wider mb-2 px-1">Quick Actions</p>
-            <div className="flex gap-2">
-              <Link
-                href="/computers/new"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#42B72A] text-white rounded-xl text-xs font-semibold hover:bg-[#36A420] transition-colors shadow-sm"
-                title="Add Computer"
-              >
-                <Plus size={16} />
-                Add Computer
-              </Link>
-              <Link
-                href="/repairs/new"
-                onClick={() => setMobileOpen(false)}
-                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0866FF] text-white rounded-xl text-xs font-semibold hover:bg-[#0748B3] transition-colors shadow-sm"
-                title="New Repair"
-              >
-                <Plus size={16} />
-                New Repair
-              </Link>
-            </div>
-          </div>
-
           {/* User info & Logout */}
           <div className="border-t border-[#E4E6EB] p-3">
             <div className="flex items-center gap-3 px-3 py-2 mb-2">
