@@ -25,6 +25,7 @@ import {
   X,
   Cpu,
   Search,
+  CalendarDays,
 } from "lucide-react";
 
 interface NavItem {
@@ -55,6 +56,7 @@ const navItems: NavItem[] = [
     children: [
       { label: "Repair Jobs", href: "/repairs", icon: <Wrench size={18} /> },
       { label: "New Repair", href: "/repairs/new", icon: <Plus size={18} /> },
+      { label: "Vendor Calendar", href: "/repairs/calendar", icon: <CalendarDays size={18} /> },
       { label: "Repair History", href: "/repairs/history", icon: <History size={18} /> },
     ],
   },

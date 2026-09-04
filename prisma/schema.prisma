@@ -144,6 +144,7 @@ model Repair {
   histories  RepairStatusHistory[]
   parts      RepairPart[]
   attachments RepairAttachment[]
+  vendorAppointments VendorAppointment[]
 
   @@map("repairs")
 }
@@ -209,6 +210,28 @@ model RepairAttachment {
   repair Repair @relation(fields: [repairId], references: [id], onDelete: Cascade)
 
   @@map("repair_attachments")
+}
+
+model VendorAppointment {
+  id              String   @id @default(cuid())
+  title           String
+  description     String?
+  vendorName      String
+  contactPerson   String?
+  contactPhone    String?
+  serviceType     String   @default("HARDWARE") // HARDWARE | SOFTWARE
+  appointmentDate DateTime
+  appointmentTime String?
+  status          String   @default("SCHEDULED") // SCHEDULED | CONFIRMED | IN_PROGRESS | COMPLETED | CANCELLED
+  cost            Float?
+  repairId        String?
+  remark          String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  repair Repair? @relation(fields: [repairId], references: [id])
+
+  @@map("vendor_appointments")
 }
 
 model PasswordResetToken {
