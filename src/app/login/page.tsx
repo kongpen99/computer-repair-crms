@@ -76,24 +76,29 @@ export default function LoginPage() {
                 </div>
               )}
 
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-3.5 border border-[#DADDE1] rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent placeholder:text-[#90949C]"
-                placeholder="อีเมลหรือชื่อผู้ใช้"
-                required
-              />
-
-              <div className="relative">
+              <div>
+                <label className="block text-sm font-medium text-[#1C1E21] mb-1.5">ชื่อผู้ใช้</label>
                 <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3.5 border border-[#DADDE1] rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent placeholder:text-[#90949C] pr-12"
-                  placeholder="รหัสผ่าน"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full px-4 py-3.5 border border-[#DADDE1] rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent placeholder:text-[#90949C]"
+                  placeholder="กรอกชื่อผู้ใช้หรืออีเมล"
                   required
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-[#1C1E21] mb-1.5">รหัสผ่าน</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full px-4 py-3.5 border border-[#DADDE1] rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#0866FF] focus:border-transparent placeholder:text-[#90949C] pr-12"
+                    placeholder="กรอกรหัสผ่าน"
+                    required
+                  />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
@@ -101,6 +106,7 @@ export default function LoginPage() {
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
+                </div>
               </div>
 
               <button
