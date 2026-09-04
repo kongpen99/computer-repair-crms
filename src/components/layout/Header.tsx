@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
-import { Search, Bell, User, LogOut, Plus, Monitor, Wrench } from "lucide-react";
+import { Search, Bell, User, LogOut, Plus, Monitor, Wrench, Settings, Shield } from "lucide-react";
 import Link from "next/link";
 
 export default function Header() {
@@ -24,7 +24,7 @@ export default function Header() {
   );
 
   return (
-    <header className="h-14 bg-white border-b border-[#DADDE1] flex items-center px-4 gap-3 sticky top-0 z-40">
+    <header className="h-14 bg-white border-b border-[#DADDE1] flex items-center px-4 gap-3 sticky top-0 z-50">
       {/* Search */}
       <form onSubmit={handleSearch} className="flex-1 max-w-lg">
         <div className="relative">
@@ -108,27 +108,70 @@ export default function Header() {
 
           {showDropdown && (
             <>
-              <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
-              <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-xl shadow-xl border border-[#DADDE1] z-50 py-2">
-                <div className="px-4 py-3 border-b border-[#E4E6EB]">
-                  <p className="font-semibold text-[#1C1E21]">{user?.name}</p>
-                  <p className="text-sm text-[#65676B]">{user?.username || user?.role}</p>
+              <div className="fixed inset-0 z-[60]" onClick={() => setShowDropdown(false)} />
+              <div className="absolute right-0 top-full mt-2 w-80 bg-white rounded-xl shadow-xl border border-[#DADDE1] z-[70] overflow-hidden">
+                {/* Profile Header */}
+                <div className="bg-gradient-to-r from-[#0866FF] to-[#0748B3] p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center border-2 border-white/40">
+                      <span className="text-xl font-bold text-white">{user?.name?.charAt(0) || "U"}</span>
+                    </div>
+                    <div>
+                      <p className="font-semibold text-white text-lg">{user?.name}</p>
+                      <p className="text-sm text-blue-100">@{user?.username}</p>
+                    </div>
+                  </div>
                 </div>
-                <Link
-                  href="/settings/users"
-                  onClick={() => setShowDropdown(false)}
-                  className="flex items-center gap-3 px-4 py-3 text-sm text-[#1C1E21] hover:bg-[#F0F2F5] transition-colors"
-                >
-                  <User size={18} className="text-[#65676B]" />
-                  ข้อมูลส่วนตัว
-                </Link>
-                <button
-                  onClick={() => { setShowDropdown(false); logout(); }}
-                  className="flex items-center gap-3 px-4 py-3 text-sm text-[#1C1E21] hover:bg-[#F0F2F5] w-full transition-colors"
-                >
-                  <LogOut size={18} className="text-[#65676B]" />
-                  ออกจากระบบ
-                </button>
+
+                {/* User Details */}
+                <div className="p-3">
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <div className="bg-[#F0F2F5] rounded-lg p-2">
+                      <div className="flex items-center gap-1.5 text-[#65676B] text-xs mb-0.5">
+                        <Shield size={12} />
+                        บทบาท
+                      </div>
+                      <p className="text-sm font-medium text-[#1C1E21]">{user?.role === "ADMIN" ? "ผู้ดูแลระบบ" : "ช่างเทคนิค"}</p>
+                    </div>
+                    <div className="bg-[#F0F2F5] rounded-lg p-2">
+                      <div className="flex items-center gap-1.5 text-[#65676B] text-xs mb-0.5">
+                        <User size={12} />
+                        สถานะ
+                      </div>
+                      <p className="text-sm font-medium text-[#42B72A]">● ออนไลน์</p>
+                    </div>
+                  </div>
+
+                  {/* Menu Items */}
+                  <div className="space-y-0.5">
+                    <Link
+                      href="/settings/users"
+                      onClick={() => setShowDropdown(false)}
+                      className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1C1E21] hover:bg-[#F0F2F5] rounded-lg transition-colors"
+                    >
+                      <User size={18} className="text-[#65676B]" />
+                      ข้อมูลส่วนตัว
+                    </Link>
+                    <Link
+                      href="/settings/departments"
+                      onClick={() => setShowDropdown(false)}
+                      className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#1C1E21] hover:bg-[#F0F2F5] rounded-lg transition-colors"
+                    >
+                      <Settings size={18} className="text-[#65676B]" />
+                      ตั้งค่าระบบ
+                    </Link>
+                  </div>
+
+                  <div className="border-t border-[#E4E6EB] mt-2 pt-2">
+                    <button
+                      onClick={() => { setShowDropdown(false); logout(); }}
+                      className="flex items-center gap-3 px-3 py-2.5 text-sm text-[#FA3E3E] hover:bg-[#FDEDEF] rounded-lg w-full transition-colors"
+                    >
+                      <LogOut size={18} />
+                      ออกจากระบบ
+                    </button>
+                  </div>
+                </div>
               </div>
             </>
           )}

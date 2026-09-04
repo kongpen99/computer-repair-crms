@@ -50,13 +50,9 @@ const navItems: NavItem[] = [
     ],
   },
   {
-    label: "Repair",
+    label: "Repair Jobs",
+    href: "/repairs",
     icon: <Wrench size={20} />,
-    children: [
-      { label: "Repair Jobs", href: "/repairs", icon: <Wrench size={18} /> },
-      { label: "Vendor Calendar", href: "/repairs/calendar", icon: <CalendarDays size={18} /> },
-      { label: "Repair History", href: "/repairs/history", icon: <History size={18} /> },
-    ],
   },
   {
     label: "Spare Parts",
@@ -85,7 +81,7 @@ const navItems: NavItem[] = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const [expandedItems, setExpandedItems] = useState<string[]>(["Computer", "Repair", "Spare Parts"]);
+  const [expandedItems, setExpandedItems] = useState<string[]>(["Computer", "Spare Parts"]);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const toggleExpand = (label: string) => {
