@@ -47,7 +47,6 @@ const navItems: NavItem[] = [
     icon: <Monitor size={20} />,
     children: [
       { label: "Computer List", href: "/computers", icon: <Monitor size={18} /> },
-      { label: "Add Computer", href: "/computers/new", icon: <Plus size={18} /> },
     ],
   },
   {
@@ -55,7 +54,6 @@ const navItems: NavItem[] = [
     icon: <Wrench size={20} />,
     children: [
       { label: "Repair Jobs", href: "/repairs", icon: <Wrench size={18} /> },
-      { label: "New Repair", href: "/repairs/new", icon: <Plus size={18} /> },
       { label: "Vendor Calendar", href: "/repairs/calendar", icon: <CalendarDays size={18} /> },
       { label: "Repair History", href: "/repairs/history", icon: <History size={18} /> },
     ],
@@ -220,6 +218,31 @@ export default function Sidebar() {
           <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-0.5">
             {navItems.map(renderNavItem)}
           </nav>
+
+          {/* Quick Action Buttons */}
+          <div className="px-3 py-3 border-t border-[#E4E6EB]">
+            <p className="text-[10px] font-semibold text-[#65676B] uppercase tracking-wider mb-2 px-1">Quick Actions</p>
+            <div className="flex gap-2">
+              <Link
+                href="/computers/new"
+                onClick={() => setMobileOpen(false)}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#42B72A] text-white rounded-xl text-xs font-semibold hover:bg-[#36A420] transition-colors shadow-sm"
+                title="Add Computer"
+              >
+                <Plus size={16} />
+                Add Computer
+              </Link>
+              <Link
+                href="/repairs/new"
+                onClick={() => setMobileOpen(false)}
+                className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-[#0866FF] text-white rounded-xl text-xs font-semibold hover:bg-[#0748B3] transition-colors shadow-sm"
+                title="New Repair"
+              >
+                <Plus size={16} />
+                New Repair
+              </Link>
+            </div>
+          </div>
 
           {/* User info & Logout */}
           <div className="border-t border-[#E4E6EB] p-3">
